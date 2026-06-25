@@ -1,0 +1,21 @@
+Problem: Code review does not scale with modern shipping velocity.
+Reviews get rushed, security issues slip through, and feedback quality drops as reviewer fatigue sets in.
+
+I targeted this problem by having a multiagent system that takes in a file and runs a distinct agent representing a key component of code review.
+I picked the three roles for my agents based on what I thought was most important, which are a logic agent, security agent and a readability agent.
+
+I decided to go for a more simplistic approach like a proof of concept, only having 2 files.
+One file was where the functions that called the agents and a coordinator were called and defined, along with testing the file.
+The other file was strictly to create a report document and was tasked with formatting this document.
+For the coordinator I assigned weights to each of the sub agents outputs depending on which I thought mattered more for example security issues matter more than code readability.
+
+The Google technology I used was gemini API as it made the most sense to use it as the LLM that will power the agents used to review the code.
+I have used gemini API before in a hackathon so I am already familiar with it as opposed to other AI API’s.
+
+Something I would improve with more time would be to isolate each agent in its own file to have better software architecture.
+I could have also used inheritance to have each of these sub agents a child of a main agent and have those functions overridden in each child.
+Another area of optimization is instead of running all these models sequentially, I could have run them in parallel.
+This would be more complicated as I would need to account for race conditions.
+For example if one model finishes too slow and then the coordinator runs, that model's output won't be used.
+I could fix this by only running the coordinator only when all three flags are set, which are set only at the end of my call_agent() functions.
+
